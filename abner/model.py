@@ -87,3 +87,5 @@ if __name__ == "__main__":
     Pred, Hn = F(IN)
     print('Pred >>', Pred.size())
     print('Hn >>', Hn.size())
+
+    # 預測漲/跌
