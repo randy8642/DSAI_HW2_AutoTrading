@@ -21,3 +21,25 @@ def _label(x):
                 label[i] = 1
     label = np.expand_dims(label, axis=1)
     return x_cut, label
+
+def _label2(x):
+    leng = x.shape[0]
+    x_cut = x[:leng-1, :]
+    label = np.zeros((leng-1))
+    for i in range(leng):
+        if (i+1)==leng:
+            break
+        else:
+            label[i] = x[i+1, -1]
+    label = np.expand_dims(label, axis=1)
+    return x_cut, label
+
+def _MAV(x, tap):
+    y = np.zeros_like(x)
+    leng = x.shape[0]
+    for i in range(leng):
+        if (i+1)<tap:
+            y[i,:] = np.mean(x[:i+1, :], axis=0)
+        else:
+            y[i,:] = np.mean(x[i-tap+1:i, :], axis=0)
+    return y

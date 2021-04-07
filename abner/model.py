@@ -105,32 +105,24 @@ class m02(nn.Module):
 class m03(nn.Module):
     def __init__(self, in_sz, out_sz, tap, hid, bid=False):
         super(m03, self).__init__()
-        self.GRU = nn.GRU(in_sz, in_sz, hid, bidirectional=bid)
+        self.GRU = nn.GRU(in_sz, out_sz, hid, bidirectional=bid)
 
         if bid:
-            sz = int(in_sz*2)
+            sz = int(out_sz*2)
         else:
-            sz = in_sz        
-
-        self.CNN = nn.Sequential(
-            nn.Conv2d(1, 16, kernel_size=(3)),
-            nn.ReLU(),
-            nn.Conv2d(16, 64, kernel_size=(3), dilation=2),
-        )
+            sz = out_sz
 
         self.FC = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(int(64*(tap-6)*2), 64),
-            nn.Sigmoid(),
-            nn.Linear(64, 1),
-            nn.Sigmoid()
+            nn.Linear(sz*tap, sz*tap//2),
+            nn.ReLU(),
+            nn.Linear(sz*tap//2, 1)
         )
-
     def forward(self, x):
-        y, hn = self.GRU(x)
-        y = self.CNN(y.unsqueeze(1))
-        y = self.FC(y)
-        return y, hn  
+        x_GRU, hn = self.GRU(x)
+        y = self.FC(x_GRU)
+        return y, hn
+       
            
 
 #%% Test

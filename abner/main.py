@@ -47,11 +47,17 @@ setup_seed(20)
 #%%
 D_tra, L_tra = functions._label(Data)
 D_tes, L_tes = functions._label(Val)
+
+
+D_tra = functions._MAV(D_tra, config.tap)
+D_tes = functions._MAV(D_tes, config.tap)
+
 D_tra_T, L_tra_T = functions._pack(D_tra, config.tap), functions._pack(L_tra, config.tap)
 D_tes_T, L_tes_T = functions._pack(D_tes, config.tap), functions._pack(L_tes, config.tap)
 
 D_tra_T = np.expand_dims(D_tra_T[:,:,-1], axis=-1)
 D_tes_T = np.expand_dims(D_tes_T[:,:,-1], axis=-1)
+
 
 #%%
 train_data = torch.from_numpy(D_tra_T).type(torch.FloatTensor)
