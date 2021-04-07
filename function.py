@@ -57,10 +57,10 @@ class stock():
         return self.actions[-1]
 
 # USAGE EXPAMPLE
-# A = stock()
+A = stock()
 
-# for i in [0,1,1,-1,-1,-1,-1,-1]:
-#     print('---------------')
-#     A.trade(i)
-#     print(A.hold)
-#     print(A.actions)
+for i in [0,1,1,-1,-1,-1,-1,-1]:
+    print('---------------')
+    A.trade(i)
+    print(A.hold)
+    print(A.actions)
