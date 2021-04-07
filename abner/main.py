@@ -1,6 +1,6 @@
 import numpy as np
-import torch
-import torch.nn as nn
+# import torch
+# import torch.nn as nn
 import pandas as pd
 import os
 import argparse
@@ -26,8 +26,8 @@ args = parser.parse_args()
 #%% 
 P = '../data'
 Data = np.array(pd.read_csv(os.path.join(P, args.training)))
-
+print(Data.shape)
 
 #%%
 D_tra, L_tra = _label(Data)
-print(D_tra)
+print(D_tra.shape)
