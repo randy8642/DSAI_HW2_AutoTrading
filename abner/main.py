@@ -48,10 +48,6 @@ setup_seed(20)
 D_tra, L_tra = functions._label(Data)
 D_tes, L_tes = functions._label(Val)
 
-
-D_tra = functions._MAV(D_tra, config.tap)
-D_tes = functions._MAV(D_tes, config.tap)
-
 D_tra_T, L_tra_T = functions._pack(D_tra, config.tap), functions._pack(L_tra, config.tap)
 D_tes_T, L_tes_T = functions._pack(D_tes, config.tap), functions._pack(L_tes, config.tap)
 
@@ -75,10 +71,10 @@ Epoch = config.ep
 single_model = model.m02(1, 1, config.tap, hid=config.hid, bid=config.bid)
 # single_model = model.m03(4, 4, config.tap, hid=config.hid, bid=config.bid)
 single_optim = optim.Adam(single_model.parameters(), lr=config.lr)
-bce_loss = nn.BCELoss()
+loss_f = nn.BCELoss()
 
 single_model.to(device)
-bce_loss.to(device)
+loss_f.to(device)
 
 #%% Training
 print('\n------Training------')
@@ -93,7 +89,8 @@ for epoch in range(Epoch):
         valid = valid.to(device)
 
         pred, _ = single_model(data)
-        loss = bce_loss(pred, valid)
+        loss = loss_f(pred, valid)
+
         A = (pred.round()==valid)
         acc = torch.sum(A)/data.size(0)
 
@@ -101,6 +98,7 @@ for epoch in range(Epoch):
         single_optim.step()
         
     with torch.no_grad():
+        # print('epoch[{}], loss:{:.4f}'.format(epoch+1, loss.item()))
         print('epoch[{}], loss:{:.4f}, acc:{:.4f}'.format(epoch+1, loss.item(), acc.item()))
 
   
@@ -125,3 +123,7 @@ with torch.no_grad():
 A = (pred_tes.round()==L_tes)
 acc = np.sum(A)/L_tes_T.shape[0]
 print('Accuracy >>', round(acc, 5))
+
+pred_tes = torch.from_numpy(pred_tes).type(torch.FloatTensor)
+pred_tes = pred_tes.to(device)
+test_label = test_label.to(device)
