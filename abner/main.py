@@ -125,3 +125,22 @@ print(MSE_tes)
 
 #%% Trend
 trend = functions._trend(pred_tes_ny)
+
+ACT = []
+HOLD = [] 
+
+act = functions.stock()
+for idx, n in enumerate(trend):
+    act.trade(n)
+    HOLD.append(act.hold)
+    ACT.append(act.actions)
+
+Result = np.array(ACT[-1])
+# print(Result)
+# print(np.array(HOLD))
+
+diction = {"Value": Result}
+select_df = pd.DataFrame(diction)
+# sf = args.model + "_" + args.output
+sf = args.output
+select_df.to_csv(sf,index=0,header=0)
