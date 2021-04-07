@@ -71,11 +71,9 @@ test_dataloader = torch.utils.data.DataLoader(dataset = test_dataset, batch_size
 
 #%%
 Epoch = config.ep
-# single_model = model.m02(1, 1, config.tap, hid=config.hid, bid=config.bid)
 single_model = model.m03(4, 64, config.tap, hid=config.hid, bid=config.bid)
 single_optim = optim.Adam(single_model.parameters(), lr=config.lr)
 loss_f = nn.MSELoss()
-# loss_f = nn.BCELoss()
 
 single_model.to(device)
 loss_f.to(device)
@@ -95,16 +93,11 @@ for epoch in range(Epoch):
         pred, _ = single_model(data)
         loss = loss_f(pred, valid)
 
-        # A = (pred.round()==valid)
-        # acc = torch.sum(A)/data.size(0)
-
         loss.backward()
         single_optim.step()
         
     with torch.no_grad():
         print('epoch[{}], loss:{:.4f}'.format(epoch+1, loss.item()))
-        # print('epoch[{}], loss:{:.4f}, acc:{:.4f}'.format(epoch+1, loss.item(), acc.item()))
-
   
 #%% Real Testing
 print('\n------Testing------')
@@ -122,11 +115,6 @@ with torch.no_grad():
             pred_tes = out
         else:
             pred_tes = np.concatenate((pred_tes, out), axis=0)
-            
-
-# A = (pred_tes.round()==L_tes)
-# acc = np.sum(A)/L_tes_T.shape[0]
-# print('Accuracy >>', round(acc, 5))
 
 pred_tes_py = functions._denor(Val[1:,:], pred_tes.squeeze())
 pred_tes = torch.from_numpy(pred_tes_py).type(torch.FloatTensor)
