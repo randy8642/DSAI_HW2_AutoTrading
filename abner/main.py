@@ -57,6 +57,9 @@ D_tes_T, L_tes_T = functions._pack(D_tes, config.tap), functions._pack(L_tes, co
 # D_tra_T = np.expand_dims(D_tra_T[:,:,-1], axis=-1)
 # D_tes_T = np.expand_dims(D_tes_T[:,:,-1], axis=-1)
 
+D_tra_T = D_tra_T[:,:,:3]
+D_tes_T = D_tes_T[:,:,:3]
+
 
 #%%
 train_data = torch.from_numpy(D_tra_T).type(torch.FloatTensor)
@@ -71,7 +74,7 @@ test_dataloader = torch.utils.data.DataLoader(dataset = test_dataset, batch_size
 
 #%%
 Epoch = config.ep
-single_model = model.m03(4, 64, config.tap, hid=config.hid, bid=config.bid)
+single_model = model.m03(3, 64, config.tap, hid=config.hid, bid=config.bid)
 single_optim = optim.Adam(single_model.parameters(), lr=config.lr)
 loss_f = nn.MSELoss()
 
@@ -120,7 +123,7 @@ pred_tes_py = functions._denor(Val[1:,:], pred_tes.squeeze())
 pred_tes = torch.from_numpy(pred_tes_py).type(torch.FloatTensor)
 pred_tes = pred_tes.to(device)
 
-val_tes_py = Val[1:,-1]
+val_tes_py = Val[:,-1]
 val_tes = torch.from_numpy(val_tes_py).type(torch.FloatTensor)
 val_tes = val_tes.to(device)
 MSE_tes = loss_f(pred_tes, val_tes)

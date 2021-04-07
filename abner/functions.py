@@ -24,8 +24,8 @@ def _label(x):
 
 def _label2(x):
     leng = x.shape[0]
-    x_cut = x[:leng-1, :]
-    label = x[1:, -1]
+    x_cut = x[:leng, :]
+    label = x[:, -1]
     label = np.expand_dims(label, axis=1)
     return x_cut, label
 
