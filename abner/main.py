@@ -67,7 +67,7 @@ test_dataloader = torch.utils.data.DataLoader(dataset = test_dataset, batch_size
 #%%
 Epoch = config.ep
 single_model = model.m02(1, 1, config.tap, hid=config.hid, bid=config.bid)
-# single_model = m03(4, 20) 
+# single_model = model.m03(4, 4, config.tap, hid=config.hid, bid=config.bid)
 single_optim = optim.Adam(single_model.parameters(), lr=config.lr)
 bce_loss = nn.BCELoss()
 

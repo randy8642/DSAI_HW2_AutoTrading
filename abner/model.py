@@ -120,7 +120,7 @@ class m03(nn.Module):
 
         self.FC = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(int(64*14*2), 64),
+            nn.Linear(int(64*(tap-6)*2), 64),
             nn.Sigmoid(),
             nn.Linear(64, 1),
             nn.Sigmoid()
