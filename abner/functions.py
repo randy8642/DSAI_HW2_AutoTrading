@@ -25,12 +25,7 @@ def _label(x):
 def _label2(x):
     leng = x.shape[0]
     x_cut = x[:leng-1, :]
-    label = np.zeros((leng-1))
-    for i in range(leng):
-        if (i+1)==leng:
-            break
-        else:
-            label[i] = x[i+1, -1]
+    label = x[1:, -1]
     label = np.expand_dims(label, axis=1)
     return x_cut, label
 
@@ -43,3 +38,11 @@ def _MAV(x, tap):
         else:
             y[i,:] = np.mean(x[i-tap+1:i, :], axis=0)
     return y
+
+def _nor(x):
+  train_norm = (x - np.mean(x)) / (np.max(x) - np.min(x))
+  return train_norm  
+
+def _denor(tes, x):
+  denorm = x*(np.max(tes) - np.min(tes)) + np.mean(tes)
+  return denorm
