@@ -17,7 +17,7 @@ def _label(x):
         if (i+1)==leng:
             break
         else:
-            if x[i,0]<x[i+1,0]:
+            if x[i,-1]<x[i+1,-1]:
                 label[i] = 1
     label = np.expand_dims(label, axis=1)
     return x_cut, label
