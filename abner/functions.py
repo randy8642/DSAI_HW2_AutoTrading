@@ -12,22 +12,15 @@ def _pack(x, tap):
 def _label(x):
     leng = x.shape[0]
     x_cut = x[:leng-1, :]
-    label = np.zeros((leng-1))
-    for i in range(leng):
-        if (i+1)==leng:
-            break
-        else:
-            if x[i,-1]<x[i+1,-1]:
-                label[i] = 1
+    label = x[1:, -1]
     label = np.expand_dims(label, axis=1)
     return x_cut, label
 
 def _label2(x):
     leng = x.shape[0]
-    x_cut = x[:leng, :]
     label = x[:, -1]
     label = np.expand_dims(label, axis=1)
-    return x_cut, label
+    return x, label    
 
 def _MAV(x, tap):
     y = np.zeros_like(x)
