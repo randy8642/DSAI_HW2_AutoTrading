@@ -11,7 +11,7 @@ import functions
 import config
 import model
 
-
+#%% Args
 parser = argparse.ArgumentParser()
 parser.add_argument('-TRA','--training',
                    default='training.csv',
@@ -27,7 +27,7 @@ parser.add_argument('-O','--output',
 
 args = parser.parse_args()
 
-#%% 
+#%% Load
 P = '../data'
 Data = np.array(pd.read_csv(os.path.join(P, args.training),header=None))
 Val = np.array(pd.read_csv(os.path.join(P, args.testing),header=None))
@@ -44,7 +44,7 @@ def setup_seed(seed):
 
 setup_seed(20)
 
-#%%
+#%% Split
 Data_n = functions._nor(Data)
 Val_n = functions._nor(Val)
 
@@ -54,14 +54,7 @@ D_tes, L_tes = functions._label2(Val_n)
 D_tra_T, L_tra_T = functions._pack(D_tra, config.tap), functions._pack(L_tra, config.tap)
 D_tes_T, L_tes_T = functions._pack(D_tes, config.tap), functions._pack(L_tes, config.tap)
 
-# D_tra_T = np.expand_dims(D_tra_T[:,:,-1], axis=-1)
-# D_tes_T = np.expand_dims(D_tes_T[:,:,-1], axis=-1)
-
-# D_tra_T = D_tra_T[:,:,:3]
-# D_tes_T = D_tes_T[:,:,:3]
-
-
-#%%
+# dataset
 train_data = torch.from_numpy(D_tra_T).type(torch.FloatTensor)
 train_label = torch.from_numpy(L_tra_T).type(torch.FloatTensor)
 train_dataset = torch.utils.data.TensorDataset(train_data, train_label)
@@ -72,7 +65,7 @@ test_label = torch.from_numpy(L_tes_T).type(torch.FloatTensor)
 test_dataset = torch.utils.data.TensorDataset(test_data, test_label)
 test_dataloader = torch.utils.data.DataLoader(dataset = test_dataset, batch_size=32, shuffle=False)
 
-#%%
+#%% Parameters
 Epoch = config.ep
 single_model = model.m03(4, 64, config.tap, hid=config.hid, bid=config.bid)
 single_optim = optim.Adam(single_model.parameters(), lr=config.lr)
@@ -102,7 +95,7 @@ for epoch in range(Epoch):
     with torch.no_grad():
         print('epoch[{}], loss:{:.4f}'.format(epoch+1, loss.item()))
   
-#%% Real Testing
+#%% Testing
 print('\n------Testing------')
 single_model.eval()
 with torch.no_grad():
@@ -119,12 +112,16 @@ with torch.no_grad():
         else:
             pred_tes = np.concatenate((pred_tes, out), axis=0)
 
-pred_tes_py = functions._denor(Val[1:,:], pred_tes.squeeze())
-pred_tes = torch.from_numpy(pred_tes_py).type(torch.FloatTensor)
+# Val.
+pred_tes_ny = functions._denor(Val[1:,:], pred_tes.squeeze())
+pred_tes = torch.from_numpy(pred_tes_ny).type(torch.FloatTensor)
 pred_tes = pred_tes.to(device)
 
-val_tes_py = Val[:,-1]
-val_tes = torch.from_numpy(val_tes_py).type(torch.FloatTensor)
+val_tes_ny = Val[:,-1]
+val_tes = torch.from_numpy(val_tes_ny).type(torch.FloatTensor)
 val_tes = val_tes.to(device)
 MSE_tes = loss_f(pred_tes, val_tes)
 print(MSE_tes)
+
+#%% Trend
+trend = functions._trend(pred_tes_ny)
