@@ -92,24 +92,55 @@ class m02(nn.Module):
 
         self.FC = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(sz*tap, 16),
-            nn.ReLU(),
-            nn.Linear(16, 1),
+            nn.Linear(sz*tap, sz*tap//2),
+            nn.Sigmoid(),
+            nn.Linear(sz*tap//2, 1),
             nn.Sigmoid()
         )
     def forward(self, x):
-        bz, tap, sq = x.size()
         x_GRU, hn = self.GRU(x)
         y = self.FC(x_GRU)
         return y, hn
 
+class m03(nn.Module):
+    def __init__(self, in_sz, out_sz, tap, hid, bid=False):
+        super(m03, self).__init__()
+        self.GRU = nn.GRU(in_sz, in_sz, hid, bidirectional=bid)
+
+        if bid:
+            sz = int(in_sz*2)
+        else:
+            sz = in_sz        
+
+        self.CNN = nn.Sequential(
+            nn.Conv2d(1, 16, kernel_size=(3)),
+            nn.ReLU(),
+            nn.Conv2d(16, 64, kernel_size=(3), dilation=2),
+        )
+
+        self.FC = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(int(64*14*2), 64),
+            nn.Sigmoid(),
+            nn.Linear(64, 1),
+            nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        y, hn = self.GRU(x)
+        y = self.CNN(y.unsqueeze(1))
+        y = self.FC(y)
+        return y, hn  
+           
+
 #%% Test
 if __name__ == "__main__":
     IN = torch.randn(32,20,4)
-    F =  m02(4, 4, 20, hid=3, bid=True)   
-    Pred, Hn = F(IN)
+    F =  m02(4, 4, 20, hid=3, bid=True)
+    F3 = m03(4, 4, 20, hid=3, bid=True)
+    Pred, Hn = F3(IN)
     print('Pred >>', Pred.size())
-    print('Hn >>', Hn.size())
+    # print('Hn >>', Hn.size())
     # print(Pred)
 
     # 預測漲/跌
