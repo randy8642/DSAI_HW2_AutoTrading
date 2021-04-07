@@ -1,18 +1,17 @@
-import numpy as np
 
 
 class stock():
-    def __init__(self, hold=0, price=0) -> None:
+    def __init__(self, hold=0, init_price=0) -> None:
         self.hold = hold
-        self.price = price
+        self.price = init_price
 
-        pass
+        self._actions = []
+        
 
     def setNewPrice(self, price):
         self.nextPrice = price
-        return self.action()
 
-    def action(self) -> int:
+    def trade(self) -> int:
         '''
         買賣交易
         ---
@@ -29,16 +28,21 @@ class stock():
         '''
         if self.hold == 1:
             if self.price < self.nextPrice:
-                return 0
+                self._actions.append(0)
             elif self.price > self.nextPrice:
-                return -1
+                self._actions.append(-1)
         elif self.hold == 0:
             if self.price < self.nextPrice:
-                return 1
+                self._actions.append(1)
             elif self.price > self.nextPrice:
-                return -1
+                self._actions.append(-1)
         elif self.hold == -1:
             if self.price < self.nextPrice:
-                return 1
+                self._actions.append(1)
             elif self.price > self.nextPrice:
-                return 0
+                self._actions.append(0)
+
+        return self._actions[-1]
+
+    def getActions(self):
+        return self._actions
