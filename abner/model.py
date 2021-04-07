@@ -80,12 +80,36 @@ class m01(nn.Module):
         pred = self.FC(inn)
         return pred, hn
 
+class m02(nn.Module):
+    def __init__(self, in_sz, out_sz, tap, hid, bid=False):
+        super(m02, self).__init__()
+        self.GRU = nn.GRU(in_sz, out_sz, hid, bidirectional=bid)
+
+        if bid:
+            sz = int(out_sz*2)
+        else:
+            sz = out_sz
+
+        self.FC = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(sz*tap, 16),
+            nn.ReLU(),
+            nn.Linear(16, 1),
+            nn.Sigmoid()
+        )
+    def forward(self, x):
+        bz, tap, sq = x.size()
+        x_GRU, hn = self.GRU(x)
+        y = self.FC(x_GRU)
+        return y, hn
+
 #%% Test
 if __name__ == "__main__":
     IN = torch.randn(32,20,4)
-    F =  m01(4, 20, hid=3)   
+    F =  m02(4, 4, 20, hid=3, bid=True)   
     Pred, Hn = F(IN)
     print('Pred >>', Pred.size())
     print('Hn >>', Hn.size())
+    # print(Pred)
 
     # 預測漲/跌
