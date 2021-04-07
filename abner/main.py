@@ -48,7 +48,7 @@ setup_seed(20)
 Data_n = functions._nor(Data)
 Val_n = functions._nor(Val)
 
-D_tra, L_tra = functions._label2(Data_n)
+D_tra, L_tra = functions._label(Data_n)
 D_tes, L_tes = functions._label2(Val_n)
 
 D_tra_T, L_tra_T = functions._pack(D_tra, config.tap), functions._pack(L_tra, config.tap)
@@ -57,8 +57,8 @@ D_tes_T, L_tes_T = functions._pack(D_tes, config.tap), functions._pack(L_tes, co
 # D_tra_T = np.expand_dims(D_tra_T[:,:,-1], axis=-1)
 # D_tes_T = np.expand_dims(D_tes_T[:,:,-1], axis=-1)
 
-D_tra_T = D_tra_T[:,:,:3]
-D_tes_T = D_tes_T[:,:,:3]
+# D_tra_T = D_tra_T[:,:,:3]
+# D_tes_T = D_tes_T[:,:,:3]
 
 
 #%%
@@ -74,7 +74,7 @@ test_dataloader = torch.utils.data.DataLoader(dataset = test_dataset, batch_size
 
 #%%
 Epoch = config.ep
-single_model = model.m03(3, 64, config.tap, hid=config.hid, bid=config.bid)
+single_model = model.m03(4, 64, config.tap, hid=config.hid, bid=config.bid)
 single_optim = optim.Adam(single_model.parameters(), lr=config.lr)
 loss_f = nn.MSELoss()
 
