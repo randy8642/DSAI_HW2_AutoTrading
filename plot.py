@@ -23,8 +23,14 @@ plt.rc('font',size=13)
 from statsmodels.tsa.seasonal import STL
 co2 = pd.Series(df_train[3].to_list(), index=pd.date_range('1-1-2017', periods=len(df_train[3]), freq='D'), name = 'stock')
 print(co2.describe())
-stl = STL(co2, seasonal=13)
+stl = STL(co2, seasonal=7)
 res = stl.fit()
-fig = res.plot()
-
+print(res.trend)
+plt.plot(df_train[3].to_list() -  res.trend)
 plt.show()
+fig = res.plot()
+plt.show()
+
+
+
+
