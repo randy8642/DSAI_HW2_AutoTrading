@@ -69,7 +69,9 @@ test_dataloader = torch.utils.data.DataLoader(dataset = test_dataset, batch_size
 #%% Parameters
 Epoch = config.ep
 single_model = model.m03(4, 16, config.tap, hid=config.hid, bid=config.bid)
+# single_model = model.m04(4, 16, config.tap, hid=config.hid, bid=config.bid)
 single_optim = optim.SGD(single_model.parameters(), lr=config.lr)
+# single_optim = optim.Adam(single_model.parameters(), lr=config.lr)
 loss_f = nn.L1Loss()
 
 single_model.to(device)
@@ -130,7 +132,7 @@ print(loss_tes)
 
 #%% Trend
 trend = functions._trend(pred_tes_ny)
-act, hold = functions._stock(trend)
+act, hold = functions._stock2(trend)
 Result = act
 
 print('act')

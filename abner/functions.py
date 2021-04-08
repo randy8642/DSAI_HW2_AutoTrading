@@ -93,3 +93,81 @@ def _stock(trend):
         ACT.append(act)
         HOLD.append(hold)
     return(np.array(ACT), np.array(HOLD))
+
+
+def _stock2(trend):
+    hold = 0
+    ACT = []
+    HOLD = []
+    leng = trend.shape[0]
+
+    '''
+    買賣交易
+    ---
+    input\\
+
+    -1:跌
+    0:持平
+    1:漲
+
+    option\\
+
+    | 持有數量 | 預測後兩天 | 採取動作 |
+    |----------|------------|----------|
+    | 1        | -1 -1      | 無 (0)   |
+    | 1        | -1 +1      | 無 (0)   |
+    | 1        | +1 -1      | 賣 (-1)  |
+    | 1        | +1 +1      | 無 (0)   |
+    | 0        | -1 -1      | 無 (0)   |
+    | 0        | -1 +1      | 買 (1)   |
+    | 0        | +1 -1      | 賣 (-1)  |
+    | 0        | +1 +1      | 無 (0)   |
+    | -1       | -1 -1      | 無 (0)   |
+    | -1       | -1 +1      | 買 (1)   |
+    | -1       | +1 -1      | 無 (0)   |
+    | -1       | +1 +1      | 無 (0)   |
+
+    '''
+
+    for i in range(leng):
+        if i+2>=leng:
+            break
+        else:
+            if trend[i]==-1 and trend[i+1]==-1:
+                # --
+                act = 0
+            elif trend[i]==-1 and trend[i+1]==1:
+                # -+
+                if hold==0:
+                    act = 1
+                    hold = 1
+                elif hold==1:
+                    act = 0
+                    hold = 1
+                elif hold==-1:
+                    act = 1
+                    hold = 0
+            elif trend[i]==1 and trend[i+1]==-1:
+                # +-
+                if hold==0:
+                    act = -1
+                    hold = 0
+                elif hold==1:
+                    act = -1
+                    hold = 0
+                elif hold==-1:
+                    act = 0
+                    hold = -1 
+            elif trend[i]==1 and trend[i+1]==1:
+                # ++
+                act = 0                                       
+            else:
+                act = 0
+        ACT.append(act)
+        HOLD.append(hold)
+
+    for j in range(2):
+        ACT.append(0)
+        HOLD.append(hold)
+
+    return(np.array(ACT), np.array(HOLD))    

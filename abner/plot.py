@@ -21,9 +21,11 @@ Pred_loss = np.array(pd.read_csv('pred_plot.csv', header=None))
 #%% Loss
 fig, ax = plt.subplots(1, 1, figsize = (10,5))
 
+# ep = np.linspace(1,20,20)
 ep = np.linspace(1,60,60)
 yticksL = [0, 30, 60, 90, 120, 150]
 xticksL = [1, 10, 20, 30, 40, 50, 60]
+# xticksL = [1, 5, 10, 15, 20]
 
 plt.title("Loss Figure", fontsize=30)
 ax.plot(ep, Data_loss)
@@ -54,8 +56,8 @@ ax.plot(x, pred, label='Pred.')
 ax.plot(x, val, label='Val.')
 ax.set_xlim(x[0], x[-1])
 ax.set_xlabel('Day', size=25)
-ax.set_xticks(xticksL)
-ax.set_xticklabels(xticksL, fontsize=20)
+ax.set_xticks(x)
+ax.set_xticklabels(x, fontsize=20)
 # ax.set_xticks(Ses)
 ax.set_ylabel('Trend', size=25)
 ax.set_yticks(yticksL)
