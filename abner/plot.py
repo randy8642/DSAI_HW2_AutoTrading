@@ -17,24 +17,24 @@ Data_loss = np.array(pd.read_csv('loss_plot.csv', header=None))
 Pred_loss = np.array(pd.read_csv('pred_plot.csv', header=None))
 
 #%% Loss
-# fig, ax = plt.subplots(1, 1, figsize = (10,5))
+fig, ax = plt.subplots(1, 1, figsize = (10,5))
 
-# ep = np.linspace(1,60,60)
-# yticksL = [0, 30, 60, 90, 120, 150]
-# xticksL = [1, 10, 20, 30, 40, 50, 60]
+ep = np.linspace(1,60,60)
+yticksL = [0, 30, 60, 90, 120, 150]
+xticksL = [1, 10, 20, 30, 40, 50, 60]
 
-# plt.title("Loss Figure", fontsize=30)
-# ax.plot(ep, Data_loss)
-# ax.set_xlim(ep[0], ep[-1])
-# ax.set_xlabel('Epoch', size=25)
-# ax.set_xticks(xticksL)
-# ax.set_xticklabels(xticksL, fontsize=20)
-# # ax.set_xticks(Ses)
-# ax.set_ylabel('L1 Loss', size=25)
-# ax.set_yticks(yticksL)
-# ax.set_yticklabels(yticksL, fontsize=20)
-# plt.tight_layout()
-# plt.savefig('loss.png')
+plt.title("Loss Figure", fontsize=30)
+ax.plot(ep, Data_loss)
+ax.set_xlim(ep[0], ep[-1])
+ax.set_xlabel('Epoch', size=25)
+ax.set_xticks(xticksL)
+ax.set_xticklabels(xticksL, fontsize=20)
+# ax.set_xticks(Ses)
+ax.set_ylabel('L1 Loss', size=25)
+ax.set_yticks(yticksL)
+ax.set_yticklabels(yticksL, fontsize=20)
+plt.tight_layout()
+plt.savefig('loss.png')
 # plt.show()
 
 #%% Pred
