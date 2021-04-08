@@ -9,33 +9,14 @@ def _pack(x, tap):
         pre_data[:, kkk, :] = data[kkk:x.shape[0] + kkk, :]
     return pre_data 
 
-def _label(x):
-    leng = x.shape[0]
-    x_cut = x[:leng-1, :]
-    label = x[1:, 0]
-    label = np.expand_dims(label, axis=1)
-    return x_cut, label
-
-def _nor(x):
-    train_norm = (x - np.mean(x)) / (np.max(x) - np.min(x))
-    return train_norm  
-
-def _denor(tes, x):
-    denorm = x*(np.max(tes) - np.min(tes)) + np.mean(tes)
-    return denorm
-
 def _nor2(x):
     mu = np.mean(x, axis=0)
-    mx = np.max(x, axis=0)
-    mn = np.min(x, axis=0)
-    train_norm = (x - mu) / (mx - mn)
-    return train_norm  
+    std = np.std(x, axis=0)
+    train_norm = (x - mu) / std
+    return train_norm, mu, std
 
-def _denor(tes, x):
-    mu = np.mean(tes, axis=0)
-    mx = np.max(tes, axis=0)
-    mn = np.min(tes, axis=0)
-    denorm = x * (mx - mn) + mu
+def _denor2(std, mu, x):
+    denorm = x * std + mu
     return denorm  
 
 def _trend(x):
@@ -110,39 +91,39 @@ class stock():
 
         return self.actions[-1]
 
-# def _stock(trend):
-#     hold = 0
-#     ACT = []
-#     HOLD = []
-#     leng = trend.shape[0]
-#     for i in range(leng):
-#         if i>=leng:
-#             break
-#         else:
-#             if trend[i]==1:
-#                 # up
-#                 if hold==0:
-#                     act = -1
-#                     hold = -1
-#                 elif hold==1:
-#                     act = -1
-#                     hold = 0
-#                 elif hold==-1:
-#                     act = 0
-#                     hold = -1
-#             elif trend[i]==-1:
-#                 # down
-#                 if hold==0:
-#                     act = 1
-#                     hold = 1
-#                 elif hold==1:
-#                     act = 0
-#                     hold = 1
-#                 elif hold==-1:
-#                     act = 1
-#                     hold = 0
-#             else:
-#                 act = 0
-#         ACT.append(act)
-#         HOLD.append(hold)
-#     return(np.array(ACT), np.array(HOLD))
+def _stock(trend):
+    hold = 0
+    ACT = []
+    HOLD = []
+    leng = trend.shape[0]
+    for i in range(leng):
+        if i>=leng:
+            break
+        else:
+            if trend[i]==1:
+                # up
+                if hold==0:
+                    act = -1
+                    hold = -1
+                elif hold==1:
+                    act = -1
+                    hold = 0
+                elif hold==-1:
+                    act = 0
+                    hold = -1
+            elif trend[i]==-1:
+                # down
+                if hold==0:
+                    act = 1
+                    hold = 1
+                elif hold==1:
+                    act = 0
+                    hold = 1
+                elif hold==-1:
+                    act = 1
+                    hold = 0
+            else:
+                act = 0
+        ACT.append(act)
+        HOLD.append(hold)
+    return(np.array(ACT), np.array(HOLD))

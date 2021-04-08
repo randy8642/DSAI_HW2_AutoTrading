@@ -45,10 +45,11 @@ def setup_seed(seed):
 setup_seed(20)
 
 #%% Split
-Data_n = functions._nor(Data)
-D_tes = functions._nor(Val)
+D_tra, mu, std = functions._nor2(Data[:-1, :])
+L_tra = Data[1:, 0]
+L_tra = np.expand_dims(L_tra, axis=1)
 
-D_tra, L_tra = functions._label(Data_n)
+D_tes, _, _ = functions._nor2(Val)
 L_tes = np.zeros((D_tes.shape[0], 1))
 
 D_tra_T, L_tra_T = functions._pack(D_tra, config.tap), functions._pack(L_tra, config.tap)
@@ -67,9 +68,9 @@ test_dataloader = torch.utils.data.DataLoader(dataset = test_dataset, batch_size
 
 #%% Parameters
 Epoch = config.ep
-single_model = model.m03(4, 64, config.tap, hid=config.hid, bid=config.bid)
-single_optim = optim.Adam(single_model.parameters(), lr=config.lr)
-loss_f = nn.MSELoss()
+single_model = model.m03(4, 16, config.tap, hid=config.hid, bid=config.bid)
+single_optim = optim.SGD(single_model.parameters(), lr=config.lr)
+loss_f = nn.L1Loss()
 
 single_model.to(device)
 loss_f.to(device)
@@ -96,6 +97,7 @@ for epoch in range(Epoch):
         print('epoch[{}], loss:{:.4f}'.format(epoch+1, loss.item()))
   
 #%% Testing
+
 print('\n------Testing------')
 single_model.eval()
 with torch.no_grad():
@@ -113,21 +115,20 @@ with torch.no_grad():
             pred_tes = np.concatenate((pred_tes, out), axis=0)
 
 # Val.
-pred_tes_ny = functions._denor(Val[1:,:], pred_tes.squeeze())
+pred_tes_ny = pred_tes.squeeze()
 pred_tes = torch.from_numpy(pred_tes_ny).type(torch.FloatTensor)
 pred_tes = pred_tes.to(device)
 
-val_tes_ny = Val[:,-1]
+val_tes_ny = Val[:,0]
 val_tes = torch.from_numpy(val_tes_ny).type(torch.FloatTensor)
 val_tes = val_tes.to(device)
-MSE_tes = loss_f(pred_tes, val_tes)
-print(MSE_tes)
+loss_tes = loss_f(pred_tes, val_tes)
+print(loss_tes)
 
 #%% Trend
-'''
 trend = functions._trend(pred_tes_ny)
 act, hold = functions._stock(trend)
-'''
+Result = act
 '''
 ACT = []
 HOLD = [] 
@@ -141,6 +142,7 @@ for idx, n in enumerate(trend):
 Result = np.array(ACT[-1])
 # print(Result)
 # print(np.array(HOLD))
+'''
 
 #%% Save
 diction = {"Value": Result}
@@ -148,4 +150,3 @@ select_df = pd.DataFrame(diction)
 # sf = args.model + "_" + args.output
 sf = args.output
 select_df.to_csv(sf,index=0,header=0)
-'''
