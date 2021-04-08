@@ -119,30 +119,21 @@ pred_tes_ny = pred_tes.squeeze()
 pred_tes = torch.from_numpy(pred_tes_ny).type(torch.FloatTensor)
 pred_tes = pred_tes.to(device)
 
-val_tes_ny = Val[:,0]
+val_tes_ny = Val[1:,0]
 val_tes = torch.from_numpy(val_tes_ny).type(torch.FloatTensor)
 val_tes = val_tes.to(device)
-loss_tes = loss_f(pred_tes, val_tes)
+loss_tes = loss_f(pred_tes[:-1], val_tes)
 print(loss_tes)
 
 #%% Trend
 trend = functions._trend(pred_tes_ny)
 act, hold = functions._stock(trend)
 Result = act
-'''
-ACT = []
-HOLD = [] 
 
-act = functions.stock()
-for idx, n in enumerate(trend):
-    act.trade(n)
-    HOLD.append(act.hold)
-    ACT.append(act.actions)
-
-Result = np.array(ACT[-1])
-# print(Result)
-# print(np.array(HOLD))
-'''
+print('act')
+print(act)
+print('\nhold')
+print(hold)
 
 #%% Save
 diction = {"Value": Result}
