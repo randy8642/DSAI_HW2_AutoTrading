@@ -29,8 +29,8 @@ args = parser.parse_args()
 
 #%% Load
 P = '../data'
-Data = np.array(pd.read_csv(os.path.join(P, args.training),header=None))
-Val = np.array(pd.read_csv(os.path.join(P, args.testing),header=None))
+Data = np.array(pd.read_csv(os.path.join(P, args.training), header=None))
+Val = np.array(pd.read_csv(os.path.join(P, args.testing), header=None))
 
 print(torch.device('cuda' if torch.cuda.is_available() else 'cpu'))
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') 
@@ -76,6 +76,7 @@ single_model.to(device)
 loss_f.to(device)
 
 #%% Training
+LOSS = []
 print('\n------Training------')
 single_model.train()
 for epoch in range(Epoch):
@@ -95,6 +96,8 @@ for epoch in range(Epoch):
         
     with torch.no_grad():
         print('epoch[{}], loss:{:.4f}'.format(epoch+1, loss.item()))
+        LOSS.append(loss.item())
+LOSS = np.array(LOSS)
   
 #%% Testing
 
@@ -138,6 +141,13 @@ print(hold)
 #%% Save
 diction = {"Value": Result}
 select_df = pd.DataFrame(diction)
-# sf = args.model + "_" + args.output
 sf = args.output
 select_df.to_csv(sf,index=0,header=0)
+
+loss_diction = {"loss": LOSS}
+select_loss_df = pd.DataFrame(loss_diction)
+select_loss_df.to_csv('loss_plot.csv',index=0,header=0)
+
+pred_diction = {"pred": pred_tes_ny, "val": Val[:,0]}
+select_pred_df = pd.DataFrame(pred_diction)
+select_pred_df.to_csv('pred_plot.csv',index=0,header=0)
