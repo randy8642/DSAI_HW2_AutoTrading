@@ -13,7 +13,7 @@ df_train.columns = ['Open', 'High', 'Low', 'Close']
 co2 = pd.Series(df_train['Open'].to_list(), index=pd.date_range('1-1-2017', periods=len(df_train), freq='D'), name = 'open')
 print(co2)
 
-stl = STL(co2, seasonal=13)
+stl = STL(co2, seasonal=31)
 res = stl.fit()
 fig = res.plot()
 

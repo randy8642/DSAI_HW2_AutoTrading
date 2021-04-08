@@ -16,11 +16,13 @@ NCKU DSAI course homework
 2. 安裝所需套件\
 `pip install -r requirements.txt`
 3. 執行\
-`python trader.py --training "Training Data" -- testing "Testing Data" --output output.csv`
+`python trader.py --training ./data/training.csv -- testing ./data/testing.csv --output ./output.csv`
 
 # 資料來源
 
 # 分析
+![最後365天股市圖](/img/candlestick_last365.png)
+![拆解trend](/img/decompose.jpeg)
 
 # 方法說明
 
