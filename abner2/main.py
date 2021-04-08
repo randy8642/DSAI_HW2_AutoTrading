@@ -106,7 +106,12 @@ LOSS = np.array(LOSS)
 print('\n------Testing------')
 single_model.eval()
 with torch.no_grad():
+    out = Val[0,0]
+    hold = 0
+    act_tot = []
+    hold_tot = []
     for n_ts, (Data_ts, Label_ts) in enumerate (test_dataloader):
+        rec = out
 
         data = Data_ts
         data = data.to(device)
@@ -114,6 +119,10 @@ with torch.no_grad():
         out, _ = single_model(data)
         out = out.cpu().data.numpy()
 
+        trend = functions._comp(rec, out)
+        act, hold = functions._stock3(trend, hold)
+        act_tot.append(act)
+        hold_tot.append(hold)
         if n_ts==0:
             pred_tes = out
         else:
@@ -131,14 +140,12 @@ loss_tes = loss_f(pred_tes[:-1], val_tes)
 print(loss_tes)
 
 #%% Trend
-trend = functions._trend(pred_tes_ny)
-act, hold = functions._stock2(trend)
-Result = act
+Result = np.array(act_tot)[:-1]
 
 print('act')
-print(act)
+print(act_tot[:-1])
 print('\nhold')
-print(hold)
+print(hold_tot[:-1])
 
 #%% Save
 diction = {"Value": Result}

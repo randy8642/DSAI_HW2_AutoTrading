@@ -162,4 +162,40 @@ def _stock2(trend):
         ACT.append(0)
         HOLD.append(hold)
 
-    return(np.array(ACT), np.array(HOLD))    
+    return(np.array(ACT), np.array(HOLD)) 
+
+def _comp(rec, out):
+    if rec>out:
+        trend = -1
+    elif rec<out:
+        trend = 1
+    else:
+        trend = 0
+    return trend
+
+def _stock3(trend, hold):
+    if trend==1:
+        # up
+        if hold==0:
+            act = -1
+            hold = -1
+        elif hold==1:
+            act = -1
+            hold = 0
+        elif hold==-1:
+            act = 0
+            hold = -1
+    elif trend==-1:
+        # down
+        if hold==0:
+            act = 1
+            hold = 1
+        elif hold==1:
+            act = 0
+            hold = 1
+        elif hold==-1:
+            act = 1
+            hold = 0
+    else:
+        act = 0
+    return act, hold
