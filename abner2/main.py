@@ -117,8 +117,8 @@ with torch.no_grad():
         data_py = data.cpu().data.numpy()
         out_py = out.cpu().data.numpy()
 
-        t0_op = data_py[:, -1, 0] * std[0] + mu[0]
-        t1_op = data_py[:, -1, -1] * std[0] + mu[0]
+        t0_op = Val[nt, 0]
+        t1_op = Val[nt, -1]
         t2_op = np.copy(out_py).squeeze()
         print(t0_op)
 
