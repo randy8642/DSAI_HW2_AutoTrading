@@ -68,10 +68,10 @@ test_dataloader = torch.utils.data.DataLoader(dataset = test_dataset, batch_size
 
 #%% Parameters
 Epoch = config.ep
-# single_model = model.m03(4, 16, config.tap, hid=config.hid, bid=config.bid)
-single_model = model.m04(4, 16, config.tap, hid=config.hid, bid=config.bid)
-# single_optim = optim.SGD(single_model.parameters(), lr=config.lr)
-single_optim = optim.Adam(single_model.parameters(), lr=config.lr)
+single_model = model.m03(4, 16, config.tap, hid=config.hid, bid=config.bid)
+# single_model = model.m04(4, 16, config.tap, hid=config.hid, bid=config.bid)
+single_optim = optim.SGD(single_model.parameters(), lr=config.lr)
+# single_optim = optim.Adam(single_model.parameters(), lr=config.lr)
 loss_f = nn.L1Loss()
 
 single_model.to(device)
