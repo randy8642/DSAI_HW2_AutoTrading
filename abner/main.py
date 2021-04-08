@@ -49,7 +49,7 @@ D_tra, mu, std = functions._nor2(Data[:-1, :])
 L_tra = Data[1:, 0]
 L_tra = np.expand_dims(L_tra, axis=1)
 
-D_tes = functions._tsnor2(mu, std, Val)
+D_tes, _, _ = functions._nor2(Val)
 L_tes = np.zeros((D_tes.shape[0], 1))
 
 D_tra_T, L_tra_T = functions._pack(D_tra, config.tap), functions._pack(L_tra, config.tap)

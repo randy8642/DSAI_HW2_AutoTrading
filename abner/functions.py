@@ -15,9 +15,9 @@ def _nor2(x):
     train_norm = (x - mu) / std
     return train_norm, mu, std
 
-def _tsnor2(mu, std, x):
-    norm = (x - mu) / std
-    return norm  
+def _denor2(std, mu, x):
+    denorm = x * std + mu
+    return denorm  
 
 def _trend(x):
     out = np.zeros_like(x)
