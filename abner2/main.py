@@ -64,7 +64,7 @@ train_dataloader = torch.utils.data.DataLoader(dataset = train_dataset, batch_si
 test_data = torch.from_numpy(D_tes_T).type(torch.FloatTensor)
 test_label = torch.from_numpy(L_tes_T).type(torch.FloatTensor)
 test_dataset = torch.utils.data.TensorDataset(test_data, test_label)
-test_dataloader = torch.utils.data.DataLoader(dataset = test_dataset, batch_size=32, shuffle=False)
+test_dataloader = torch.utils.data.DataLoader(dataset = test_dataset, batch_size=1, shuffle=False)
 
 #%% Parameters
 Epoch = config.ep
@@ -117,7 +117,7 @@ with torch.no_grad():
 
         t0_op = data_py[:, -1, 0]
         t1_op = data_py[:, -1, -1]
-        t2_op = np.copy(out_py)
+        t2_op = np.copy(out_py).squeeze()
 
         print(t0_op.shape)
         print(t1_op.shape)
