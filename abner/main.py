@@ -130,7 +130,7 @@ print(loss_tes)
 
 #%% Trend
 trend = functions._trend(pred_tes_ny)
-act, hold = functions._stock(trend)
+act, hold = functions._stock2(trend)
 Result = act
 
 print('act')
