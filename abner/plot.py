@@ -12,6 +12,8 @@ matplotlib.rcParams['mathtext.rm'] = 'Times New Roman'
 matplotlib.rcParams['mathtext.it'] = 'Times New Roman'
 matplotlib.rcParams['mathtext.bf'] = 'Times New Roman'
 
+sP = '../img'
+
 #%% Data
 Data_loss = np.array(pd.read_csv('loss_plot.csv', header=None))
 Pred_loss = np.array(pd.read_csv('pred_plot.csv', header=None))
@@ -34,7 +36,8 @@ ax.set_ylabel('L1 Loss', size=25)
 ax.set_yticks(yticksL)
 ax.set_yticklabels(yticksL, fontsize=20)
 plt.tight_layout()
-plt.savefig('loss.png')
+
+plt.savefig(os.path.join(sP, 'loss.png'))
 # plt.show()
 
 #%% Pred
@@ -59,5 +62,6 @@ ax.set_yticks(yticksL)
 ax.set_yticklabels(yticksL, fontsize=20)
 plt.legend(loc=1, fontsize=20)
 plt.tight_layout()
-plt.savefig('trend.png')
+
+plt.savefig(os.path.join(sP, 'trend.png'))
 # plt.show()
