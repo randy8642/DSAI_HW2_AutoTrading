@@ -102,10 +102,12 @@ for epoch in range(Epoch):
 LOSS = np.array(LOSS)
   
 #%% Testing
-
 print('\n------Testing------')
 single_model.eval()
 with torch.no_grad():
+    hold = 0
+    ACT = []
+    HOLD = []
     for n_ts, (Data_ts, Label_ts) in enumerate (test_dataloader):
 
         data = Data_ts
@@ -119,9 +121,9 @@ with torch.no_grad():
         t1_op = data_py[:, -1, -1]
         t2_op = np.copy(out_py).squeeze()
 
-        print(t0_op.shape)
-        print(t1_op.shape)
-        print(t2_op.shape)
+        act, hold = _stock3(t0_op, t1_op, t2_op, hold)
+        ACT.append(act)
+        HOLD.append(hold)
 
         if n_ts==0:
             pred_tes = out_py
