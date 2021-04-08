@@ -1,4 +1,4 @@
-from talib import abstract
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -36,8 +36,18 @@ def KD(data):
 
 
 d = KD(df)
-d = d[30:]
-print(d)
-plt.plot(d['K'])
-plt.plot(d['D'])
+d = d[-30:]
+
+fig, ax = plt.subplots(2, 1)
+ax[0].plot(d['Open'], label='Open')
+ax[0].fill_between(d.index, d['Low'], d['High'], alpha=0.2)
+ax[0].plot(d['Close'], label='Close')
+ax[0].legend(loc=1)
+ax[0].set_xticklabels([])
+
+ax[1].plot(d['K'], label='K')
+ax[1].plot(d['D'], label='D')
+ax[1].legend(loc=1)
+ax[1].set_xticklabels([])
+
 plt.show()

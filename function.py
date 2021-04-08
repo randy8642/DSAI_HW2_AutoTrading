@@ -13,8 +13,8 @@ class stock():
         ---
         input\\
 
-        -1:跌
-        0:持平
+        0:跌
+        2:持平
         1:漲
 
         option\\
@@ -32,23 +32,23 @@ class stock():
         if self.hold == 1:
             if predict == 1:
                 self.actions.append(0)
-            elif predict == 0:
+            elif predict == 2:
                 self.actions.append(0)
-            elif predict == -1:
+            elif predict == 0:
                 self.actions.append(-1)
         elif self.hold == 0:
             if predict == 1:
                 self.actions.append(1)
-            elif predict == 0:
+            elif predict == 2:
                 self.actions.append(0)
-            elif predict == -1:
+            elif predict == 0:
                 self.actions.append(-1)
         elif self.hold == -1:
             if predict == 1:
                 self.actions.append(1)
-            elif predict == 0:
+            elif predict == 2:
                 self.actions.append(0)
-            elif predict == -1:
+            elif predict == 0:
                 self.actions.append(0)
 
         # 
@@ -57,10 +57,9 @@ class stock():
         return self.actions[-1]
 
 # USAGE EXPAMPLE
-A = stock()
+# A = stock()
 
-for i in [0,1,1,-1,-1,-1,-1,-1]:
-    print('---------------')
-    A.trade(i)
-    print(A.hold)
-    print(A.actions)
+# for i in [-1, -1, -1, -1, -1, -1, -1, -1, 1, 1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 1]:
+#     A.trade(i)
+
+# print(A.actions)
