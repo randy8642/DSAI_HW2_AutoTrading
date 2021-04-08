@@ -120,8 +120,9 @@ with torch.no_grad():
         t0_op = data_py[:, -1, 0]
         t1_op = data_py[:, -1, -1]
         t2_op = np.copy(out_py).squeeze()
+        print(t0_op)
 
-        act, hold = _stock3(t0_op, t1_op, t2_op, hold)
+        act, hold = functions._stock3(t0_op, t1_op, t2_op, hold)
         ACT.append(act)
         HOLD.append(hold)
 
@@ -130,6 +131,7 @@ with torch.no_grad():
         else:
             pred_tes = np.concatenate((pred_tes, out_py), axis=0)
 
+print(ACT)
 '''
 # Val.
 pred_tes_ny = pred_tes.squeeze()
