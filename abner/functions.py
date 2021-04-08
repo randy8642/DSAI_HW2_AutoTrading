@@ -20,7 +20,7 @@ def _label2(x):
     leng = x.shape[0]
     label = x[:, 0]
     label = np.expand_dims(label, axis=1)
-    return x, label    
+    return x  
 
 def _nor(x):
   train_norm = (x - np.mean(x)) / (np.max(x) - np.min(x))
@@ -101,3 +101,40 @@ class stock():
         self.hold += self.actions[-1]
 
         return self.actions[-1]
+
+# def _stock(trend):
+#     hold = 0
+#     ACT = []
+#     HOLD = []
+#     leng = trend.shape[0]
+#     for i in range(leng):
+#         if i>=leng:
+#             break
+#         else:
+#             if trend[i]==1:
+#                 # up
+#                 if hold==0:
+#                     act = -1
+#                     hold = -1
+#                 elif hold==1:
+#                     act = -1
+#                     hold = 0
+#                 elif hold==-1:
+#                     act = 0
+#                     hold = -1
+#             elif trend[i]==-1:
+#                 # down
+#                 if hold==0:
+#                     act = 1
+#                     hold = 1
+#                 elif hold==1:
+#                     act = 0
+#                     hold = 1
+#                 elif hold==-1:
+#                     act = 1
+#                     hold = 0
+#             else:
+#                 act = 0
+#         ACT.append(act)
+#         HOLD.append(hold)
+#     return(np.array(ACT), np.array(HOLD))

@@ -122,6 +122,27 @@ class m03(nn.Module):
         x_GRU, hn = self.GRU(x)
         y = self.FC(x_GRU)
         return y, hn
+
+class m04(nn.Module):
+    def __init__(self, in_sz, out_sz, tap, hid, bid=False):
+        super(m04, self).__init__()
+        self.GRU = nn.GRU(in_sz, out_sz, hid, bidirectional=bid)
+
+        if bid:
+            sz = int(out_sz*2)
+        else:
+            sz = out_sz
+
+        self.FC = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(sz*tap, sz*tap//2),
+            nn.ReLU(),
+            nn.Linear(sz*tap//2, 2)
+        )
+    def forward(self, x):
+        x_GRU, hn = self.GRU(x)
+        y = self.FC(x_GRU)
+        return y, hn        
        
            
 

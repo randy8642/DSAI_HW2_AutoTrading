@@ -50,7 +50,10 @@ Val_n = functions._nor(Val)
 
 D_tra, L_tra = functions._label(Data_n)
 D_tes = functions._label2(Val_n)
-L_tes = np.zeros((D_tes.shape[0], 1))
+L_tes = np.zeros((D_tes.shape[0], 2))
+
+D_tra = D_tra[:-1, :]
+L_tra = np.hstack((L_tra[:-1, :], L_tra[1:, :]))
 
 D_tra_T, L_tra_T = functions._pack(D_tra, config.tap), functions._pack(L_tra, config.tap)
 D_tes_T, L_tes_T = functions._pack(D_tes, config.tap), functions._pack(L_tes, config.tap)
@@ -68,7 +71,8 @@ test_dataloader = torch.utils.data.DataLoader(dataset = test_dataset, batch_size
 
 #%% Parameters
 Epoch = config.ep
-single_model = model.m03(4, 64, config.tap, hid=config.hid, bid=config.bid)
+# single_model = model.m03(4, 64, config.tap, hid=config.hid, bid=config.bid)
+single_model = model.m04(4, 64, config.tap, hid=config.hid, bid=config.bid)
 single_optim = optim.Adam(single_model.parameters(), lr=config.lr)
 loss_f = nn.MSELoss()
 
@@ -119,9 +123,10 @@ pred_tes = torch.from_numpy(pred_tes_ny).type(torch.FloatTensor)
 pred_tes = pred_tes.to(device)
 
 val_tes_ny = Val[:,-1]
+val_tes_ny = np.vstack((val_tes_ny[:-1], val_tes_ny[1:])).T
 val_tes = torch.from_numpy(val_tes_ny).type(torch.FloatTensor)
 val_tes = val_tes.to(device)
-MSE_tes = loss_f(pred_tes, val_tes)
+MSE_tes = loss_f(pred_tes[:-1, :], val_tes)
 print(MSE_tes)
 
 #%% Trend
