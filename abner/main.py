@@ -42,7 +42,7 @@ def setup_seed(seed):
     random.seed(seed)
     torch.backends.cudnn.deterministic = True
 
-setup_seed(20)
+setup_seed(25)
 
 #%% Split
 D_tra, mu, std = functions._nor2(Data[:-1, :])
