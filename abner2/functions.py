@@ -44,13 +44,10 @@ def _stock(trend):
     買賣交易
     ---
     input\\
-
     -1:跌
     0:持平
     1:漲
-
     option\\
-
     | 持有數量 | 預測明天相對今天 | 採取動作 |
     |----------|------------------|----------|
     | 1        | 漲 (1)           | 賣 (-1)  |
@@ -59,7 +56,6 @@ def _stock(trend):
     | 0        | 跌 (-1)          | 買 (1)   |
     | -1       | 漲 (1)           | 無 (0)   |
     | -1       | 跌 (-1)          | 買 (1)   |
-
     '''
 
     for i in range(leng):
@@ -105,13 +101,10 @@ def _stock2(trend):
     買賣交易
     ---
     input\\
-
     -1:跌
     0:持平
     1:漲
-
     option\\
-
     | 持有數量 | 預測後兩天 | 採取動作 |
     |----------|------------|----------|
     | 1        | -1 -1      | 無 (0)   |
@@ -126,7 +119,6 @@ def _stock2(trend):
     | -1       | -1 +1      | 買 (1)   |
     | -1       | +1 -1      | 無 (0)   |
     | -1       | +1 +1      | 無 (0)   |
-
     '''
 
     for i in range(leng):
@@ -171,37 +163,3 @@ def _stock2(trend):
         HOLD.append(hold)
 
     return(np.array(ACT), np.array(HOLD))    
-
-def _stock3(t0_op, t1_op, t2_op, hold):
-    if (t1_op<t0_op) and (t2_op<t1_op):
-        # --
-        act = 0
-    elif (t1_op<t0_op) and (t2_op>t1_op):
-        # -+
-        if hold==0:
-            act = 1
-            hold = 1
-        elif hold==1:
-            act = 0
-            hold = 1
-        elif hold==-1:
-            act = 1
-            hold = 0  
-    elif (t1_op>t0_op) and (t2_op<t1_op):   
-        # +-
-        if hold==0:
-            act = -1
-            hold = 0
-        elif hold==1:
-            act = -1
-            hold = 0
-        elif hold==-1:
-            act = 0
-            hold = -1
-    elif (t1_op>t0_op) and (t2_op>t1_op):     
-        # ++
-        act = 0                                       
-    else:
-        act = 0 
-
-    return act, hold                 

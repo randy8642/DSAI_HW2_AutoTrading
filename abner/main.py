@@ -42,7 +42,7 @@ def setup_seed(seed):
     random.seed(seed)
     torch.backends.cudnn.deterministic = True
 
-setup_seed(25)
+setup_seed(2)
 
 #%% Split
 D_tra, mu, std = functions._nor2(Data[:-1, :])
@@ -64,7 +64,7 @@ train_dataloader = torch.utils.data.DataLoader(dataset = train_dataset, batch_si
 test_data = torch.from_numpy(D_tes_T).type(torch.FloatTensor)
 test_label = torch.from_numpy(L_tes_T).type(torch.FloatTensor)
 test_dataset = torch.utils.data.TensorDataset(test_data, test_label)
-test_dataloader = torch.utils.data.DataLoader(dataset = test_dataset, batch_size=32, shuffle=False)
+test_dataloader = torch.utils.data.DataLoader(dataset = test_dataset, batch_size=1, shuffle=False)
 
 #%% Parameters
 Epoch = config.ep

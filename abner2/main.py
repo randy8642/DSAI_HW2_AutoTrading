@@ -42,11 +42,11 @@ def setup_seed(seed):
     random.seed(seed)
     torch.backends.cudnn.deterministic = True
 
-setup_seed(20)
+setup_seed(25)
 
 #%% Split
 D_tra, mu, std = functions._nor2(Data[:-1, :])
-L_tra = Data[1:, -1]
+L_tra = Data[1:, 0]
 L_tra = np.expand_dims(L_tra, axis=1)
 
 D_tes, _, _ = functions._nor2(Val)
@@ -102,37 +102,23 @@ for epoch in range(Epoch):
 LOSS = np.array(LOSS)
   
 #%% Testing
+
 print('\n------Testing------')
 single_model.eval()
 with torch.no_grad():
-    hold = 0
-    ACT = []
-    HOLD = []
     for n_ts, (Data_ts, Label_ts) in enumerate (test_dataloader):
 
         data = Data_ts
         data = data.to(device)
             
         out, _ = single_model(data)
-        data_py = data.cpu().data.numpy()
-        out_py = out.cpu().data.numpy()
-
-        t0_op = Val[nt, 0]
-        t1_op = Val[nt, -1]
-        t2_op = np.copy(out_py).squeeze()
-        print(t0_op)
-
-        act, hold = functions._stock3(t0_op, t1_op, t2_op, hold)
-        ACT.append(act)
-        HOLD.append(hold)
+        out = out.cpu().data.numpy()
 
         if n_ts==0:
-            pred_tes = out_py
+            pred_tes = out
         else:
-            pred_tes = np.concatenate((pred_tes, out_py), axis=0)
+            pred_tes = np.concatenate((pred_tes, out), axis=0)
 
-print(ACT)
-'''
 # Val.
 pred_tes_ny = pred_tes.squeeze()
 pred_tes = torch.from_numpy(pred_tes_ny).type(torch.FloatTensor)
@@ -167,4 +153,3 @@ select_loss_df.to_csv('loss_plot.csv',index=0,header=0)
 pred_diction = {"pred": pred_tes_ny, "val": Val[:,0]}
 select_pred_df = pd.DataFrame(pred_diction)
 select_pred_df.to_csv('pred_plot.csv',index=0,header=0)
-'''
