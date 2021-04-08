@@ -16,19 +16,27 @@ def _label(x):
     label = np.expand_dims(label, axis=1)
     return x_cut, label
 
-def _label2(x):
-    leng = x.shape[0]
-    label = x[:, 0]
-    label = np.expand_dims(label, axis=1)
-    return x  
-
 def _nor(x):
-  train_norm = (x - np.mean(x)) / (np.max(x) - np.min(x))
-  return train_norm  
+    train_norm = (x - np.mean(x)) / (np.max(x) - np.min(x))
+    return train_norm  
 
 def _denor(tes, x):
-  denorm = x*(np.max(tes) - np.min(tes)) + np.mean(tes)
-  return denorm
+    denorm = x*(np.max(tes) - np.min(tes)) + np.mean(tes)
+    return denorm
+
+def _nor2(x):
+    mu = np.mean(x, axis=0)
+    mx = np.max(x, axis=0)
+    mn = np.min(x, axis=0)
+    train_norm = (x - mu) / (mx - mn)
+    return train_norm  
+
+def _denor(tes, x):
+    mu = np.mean(tes, axis=0)
+    mx = np.max(tes, axis=0)
+    mn = np.min(tes, axis=0)
+    denorm = x * (mx - mn) + mu
+    return denorm  
 
 def _trend(x):
     out = np.zeros_like(x)

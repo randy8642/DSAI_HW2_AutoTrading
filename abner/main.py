@@ -46,10 +46,9 @@ setup_seed(20)
 
 #%% Split
 Data_n = functions._nor(Data)
-Val_n = functions._nor(Val)
+D_tes = functions._nor(Val)
 
 D_tra, L_tra = functions._label(Data_n)
-D_tes = functions._label2(Val_n)
 L_tes = np.zeros((D_tes.shape[0], 1))
 
 D_tra_T, L_tra_T = functions._pack(D_tra, config.tap), functions._pack(L_tra, config.tap)
