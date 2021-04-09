@@ -13,11 +13,11 @@ import model
 
 #%% Args
 parser = argparse.ArgumentParser()
-parser.add_argument('-TRA','--training',
+parser.add_argument('-R','--training',
                    default='training.csv',
                    help='input training data file name')
 
-parser.add_argument('-TES','--testing',
+parser.add_argument('-E','--testing',
                     default='testing.csv',
                     help='input testing data file name')
 
@@ -45,11 +45,11 @@ def setup_seed(seed):
 setup_seed(3)
 
 #%% Split
-D_tra, mu, std = functions._nor2(Data[:-1, :])
+D_tra, mu, std = functions._nor(Data[:-1, :])
 L_tra = Data[1:, 0]
 L_tra = np.expand_dims(L_tra, axis=1)
 
-D_tes, _, _ = functions._nor2(Val)
+D_tes, _, _ = functions._nor(Val)
 L_tes = np.zeros((D_tes.shape[0], 1))
 
 D_tra_T, L_tra_T = functions._pack(D_tra, config.tap), functions._pack(L_tra, config.tap)
@@ -120,7 +120,7 @@ with torch.no_grad():
         out = out.cpu().data.numpy()
 
         trend = functions._comp(rec, out)
-        act, hold = functions._stock3(trend, hold)
+        act, hold = functions._stock(trend, hold)
         act_tot.append(act)
         hold_tot.append(hold)
         if n_ts==0:
