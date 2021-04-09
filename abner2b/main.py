@@ -154,9 +154,9 @@ print(loss_tes)
 #%% Trend
 Result = np.array(act_tot)[:-1]
 
-print('act')
+print('total act')
 print(act_tot[:-1])
-print('\nhold')
+print('\n total hold state')
 print(hold_tot[:-1])
 
 #%% Save
