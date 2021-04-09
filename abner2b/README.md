@@ -36,7 +36,7 @@ NCKU DSAI course homework
 `python main.py --training training.csv -- testing testing.csv --output output.csv`
 
 ## 資料來源
-IBM公司過去特定時間段的每日股市開盤價、最高價、最低價與收盤價，合計四項數值。\
+IBM公司過去某時間段的每日股市開盤價、最高價、最低價與收盤價，合計四項數值。\
 [[Stock History Reference](https://www.nasdaq.com/market-activity/stocks/ibm)]
 
 ## 分析
