@@ -15,11 +15,11 @@ NCKU DSAI course homework
 
 ### 使用方式
 1. 進入專案資料夾\
-`cd /d [path/to/this/project]`
+`cd /d [path/to/this/project]`  
 
 2. 安裝所需套件\
-`pip install -r requirements.txt`
-(**不含PyTorch**)
+`pip install -r requirements.txt`  (**不含PyTorch**，需照以下步驟安裝。)
+
 
 3. 安裝`PyTorch`\
     **詳見PyTorch官網，如有其他需求也請至該網站下載 [[LINK](https://pytorch.org/get-started/locally/)]**
