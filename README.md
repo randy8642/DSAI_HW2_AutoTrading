@@ -41,8 +41,19 @@ IBM公司過去某時間段的每日股市開盤價、最高價、最低價與�
 [[Stock History Reference](https://www.nasdaq.com/market-activity/stocks/ibm)]
 
 ## 分析
-![最後365天股市圖](https://i.imgur.com/EZzK8Dl.png)
+首先列出資料後180天的漲幅蠟燭圖與KD線，觀察其漲/跌情形。
+![後180天蠟燭圖與KD線](https://i.imgur.com/qYVBZyN.png)
+
+另外透過seasonal decompose分析其開盤價，\
+並依序拆解為trend component、seasonal component以及residuals，\
+希望藉此觀察是否有規律可循，然並無看見明顯規律。
 ![拆解trend](https://i.imgur.com/zlQKmNp.jpg)
+
+最後畫出訓練資料與測試資料的趨勢，可發現兩者的確為連續資料，\
+同時考量資料量的差異，應可直接使用訓練資料之平均值與標準差，\
+對測試資料進行正規化。
+![TrTs](https://i.imgur.com/rZjWCKF.jpg)
+
 
 ## 方法說明
 ### 概述
@@ -129,4 +140,4 @@ for n_ts, (Data_ts, Label_ts) in enumerate (test_dataloader):
 \
 訓練時loss的變化圖如下所示：
 ![loss](https://i.imgur.com/25IFSwV.png)
-此處使用Adam作為optimizer；L1 loss作為loss function，參數詳見`config.py`。
+此處使用Adam作為optimizer；L1 loss作為loss function，**參數詳見`config.py`**。
