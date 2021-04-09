@@ -35,9 +35,6 @@ NCKU DSAI course homework
 4. 執行\
 `python main.py --training training.csv -- testing testing.csv --output output.csv`
 
-5. 驗證最終收益 (**該步驟可略**)
-`python profit_calculator.py --stock testing.csv --action output.csv`
-
 ## 資料來源
 IBM公司過去特定時間段的每日股市開盤價、最高價、最低價與收盤價，合計四項數值。\
 [[Stock History Reference](https://www.nasdaq.com/market-activity/stocks/ibm)]
@@ -59,21 +56,74 @@ Data = np.array(pd.read_csv(os.path.join(P, args.training), header=None))
 Val = np.array(pd.read_csv(os.path.join(P, args.testing), header=None))
 # Normalization
 D_tra, mu, std = functions._nor(Data[:-1, :])
-D_tes = functions._tsnor(mu, std, Val_tot)
+D_tes = functions._tsnor(mu, std, Val)
 ```
 此處為避免使用到未來的測試資料，根據訓練資料與測試資料為**同一連續資料**的原則，\
 故使用訓練資料的**平均值**與**標準差**進行正規化。
 
 ### Sliding Windows
 ```py
-# Fill the empty of testing data
-Val_tot = np.concatenate((Data[((config.tap-1)*-1):, :], Val))
-# Sliding windows
 D_tra_T, L_tra_T = functions._pack(D_tra, config.tap), functions._pack(L_tra, config.tap)
 D_tes_T, L_tes_T = functions._pack(D_tes, config.tap), functions._pack(L_tes, config.tap)
-# Remove redundant data
-D_tes_T = D_tes_T[(config.tap-1):,:,:]
-L_tes_T = L_tes_T[(config.tap-1):,:,:]
 ```
-由於訓練資料為整段連續資料的開頭，
+由於訓練資料與測試資料開頭前n-1天不足window size所需長度(n)，\
+故兩段資料的前n-1天皆做**zero padding**補齊長度。
+
+### 將資料包成dataset形式
+```py
+train_data = torch.from_numpy(D_tra_T).type(torch.FloatTensor)
+train_label = torch.from_numpy(L_tra_T).type(torch.FloatTensor)
+train_dataset = torch.utils.data.TensorDataset(train_data, train_label)
+train_dataloader = torch.utils.data.DataLoader(dataset = train_dataset, batch_size=32, shuffle=True)
+
+test_data = torch.from_numpy(D_tes_T).type(torch.FloatTensor)
+test_label = torch.from_numpy(L_tes_T).type(torch.FloatTensor)
+test_dataset = torch.utils.data.TensorDataset(test_data, test_label)
+test_dataloader = torch.utils.data.DataLoader(dataset = test_dataset, batch_size=1, shuffle=False)
+```
+為確保測試時，模型能一次只輸入一天的資料，並輸出隔天的預測開盤價，\
+因此在`test_dataloader`處**將`batch_size`設為1**；**並把`shuffle`關閉**。
+
+### 測試時輸出隔天行動
+```py
+# Initialize parameters
+out = Val[0,0]
+hold = 0
+act_tot = []
+hold_tot = []
+for n_ts, (Data_ts, Label_ts) in enumerate (test_dataloader):
+    # Record today open price
+    rec = out
+
+    data = Data_ts
+    data = data.to(device)
+    # Ouput the prediction of tomorrow open price
+    out, _ = single_model(data)
+    out = out.cpu().data.numpy()
+    # Compare the open price above, and decide action
+    trend = functions._comp(rec, out)
+    act, hold = functions._stock(trend, hold)
+```
+每次輸入模型之前記錄當天(預測)開盤價，並比較隔天預測值輸出漲/跌趨勢，\
+之後根據該趨勢採取行動。採取行動邏輯及模型架構詳見下述。
+
+#### 判斷行動依準
+| 持有數量 | 預測明天相對今天 | 採取動作 |
+|----------|------------------|----------|
+| 1        | 漲 (1)           | 賣 (-1)  |
+| 1        | 跌 (-1)          | 無 (0)   |
+| 0        | 漲 (1)           | 賣 (-1)  |
+| 0        | 跌 (-1)          | 買 (1)   |
+| -1       | 漲 (1)           | 無 (0)   |
+| -1       | 跌 (-1)          | 買 (1)   |
+
+#### 模型架構
+![model](https://i.imgur.com/ROotUbG.png)
+
 ## 結果
+將預測值與實際開盤價比較化成趨勢圖，如下所示：\
+![trend](https://i.imgur.com/2QuAqGm.png)
+由該處可發現，雖大致上趨勢皆有符合實際情形，但仍有1天左右的偏移，\
+推測此為預測失準的原因所致。
+
+`python profit_calculator.py --stock testing.csv --action output.csv`
