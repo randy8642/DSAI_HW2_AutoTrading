@@ -104,7 +104,7 @@ if __name__ == "__main__":
 
     # Load stock data
     FEATURE_NAMES = ('open', 'high', 'low', 'close')
-    P = '../data'
+    P = './data'
     stocks_df = pd.read_csv(os.path.join(P, args.stock), names=FEATURE_NAMES)
 
     # Load actions
