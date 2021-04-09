@@ -46,8 +46,8 @@ plt.savefig(os.path.join(sP, 'loss.png'))
 fig, ax = plt.subplots(1, 1, figsize = (10,5))
 
 x = np.linspace(1,19,19)
-pred, _, _ = functions._nor2(Pred_loss[1:,0])
-val, _, _ = functions._nor2(Pred_loss[:-1,1])
+pred, _, _ = functions._nor(Pred_loss[1:,0])
+val, _, _ = functions._nor(Pred_loss[:-1,1])
 yticksL = [-2, -1, 0, 1, 2]
 xticksL = [1, 5, 10, 15, 19]
 
