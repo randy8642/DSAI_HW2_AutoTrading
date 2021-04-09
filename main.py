@@ -29,7 +29,7 @@ parser.add_argument('-O','--output',
 args = parser.parse_args()
 
 #%% Load
-P = '../data'
+P = './data'
 Data = np.array(pd.read_csv(os.path.join(P, args.training), header=None))
 Val = np.array(pd.read_csv(os.path.join(P, args.testing), header=None))
 
@@ -164,10 +164,12 @@ select_df = pd.DataFrame(diction)
 sf = args.output
 select_df.to_csv(sf,index=0,header=0)
 
+sP = './other_csv'
+
 loss_diction = {"loss": LOSS}
 select_loss_df = pd.DataFrame(loss_diction)
-select_loss_df.to_csv('loss_plot.csv',index=0,header=0)
+select_loss_df.to_csv(os.path.join(sP, 'loss_plot.csv'),index=0,header=0)
 
 pred_diction = {"pred": pred_tes_ny, "val": Val[:,0]}
 select_pred_df = pd.DataFrame(pred_diction)
-select_pred_df.to_csv('pred_plot.csv',index=0,header=0)
+select_pred_df.to_csv(os.path.join(sP, 'pred_plot.csv'),index=0,header=0)

@@ -12,11 +12,12 @@ matplotlib.rcParams['mathtext.rm'] = 'Times New Roman'
 matplotlib.rcParams['mathtext.it'] = 'Times New Roman'
 matplotlib.rcParams['mathtext.bf'] = 'Times New Roman'
 
+P = '../other_csv'
 sP = '../img'
 
 #%% Data
-Data_loss = np.array(pd.read_csv('loss_plot.csv', header=None))
-Pred_loss = np.array(pd.read_csv('pred_plot.csv', header=None))
+Data_loss = np.array(pd.read_csv(os.path.join(P, 'loss_plot.csv'), header=None))
+Pred_loss = np.array(pd.read_csv(os.path.join(P, 'pred_plot.csv'), header=None))
 
 #%% Loss
 fig, ax = plt.subplots(1, 1, figsize = (10,5))
