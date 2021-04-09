@@ -47,15 +47,19 @@ setup_seed(25)
 
 #%% Split
 D_tra, mu, std = functions._nor(Data[:-1, :])
-L_tra = Data[1:, -1]
+L_tra = Data[1:, 0]
 L_tra = np.expand_dims(L_tra, axis=1)
 
 # D_tes, _, _ = functions._nor(Val)
-D_tes = functions._tsnor(mu, std, Val)
+Val_tot = np.concatenate((Data[((config.tap-1)*-1):, :], Val))
+D_tes = functions._tsnor(mu, std, Val_tot)
 L_tes = np.zeros((D_tes.shape[0], 1))
 
 D_tra_T, L_tra_T = functions._pack(D_tra, config.tap), functions._pack(L_tra, config.tap)
 D_tes_T, L_tes_T = functions._pack(D_tes, config.tap), functions._pack(L_tes, config.tap)
+
+D_tes_T = D_tes_T[(config.tap-1):,:,:]
+L_tes_T = L_tes_T[(config.tap-1):,:,:]
 
 # dataset
 train_data = torch.from_numpy(D_tra_T).type(torch.FloatTensor)
@@ -67,6 +71,7 @@ test_data = torch.from_numpy(D_tes_T).type(torch.FloatTensor)
 test_label = torch.from_numpy(L_tes_T).type(torch.FloatTensor)
 test_dataset = torch.utils.data.TensorDataset(test_data, test_label)
 test_dataloader = torch.utils.data.DataLoader(dataset = test_dataset, batch_size=1, shuffle=False)
+
 
 #%% Parameters
 Epoch = config.ep
@@ -108,33 +113,32 @@ LOSS = np.array(LOSS)
 print('\n------Testing------')
 single_model.eval()
 with torch.no_grad():
+    out = Val[0,0]
     hold = 0
     act_tot = []
     hold_tot = []
-    sti = []
     for n_ts, (Data_ts, Label_ts) in enumerate (test_dataloader):
-
+        rec = out
+        
         data = Data_ts
         data = data.to(device)
             
         out, _ = single_model(data)
-        out_py = out.cpu().data.numpy()
-        t0_op = data.cpu().data.numpy()[:, -1, 0]
-        t1_op = data.cpu().data.numpy()[:, -1, -1]
-        t2_op = functions._tsnor(mu[-1], std[-1], out_py)
+        out = out.cpu().data.numpy()
 
-        # print(t0_op)
-        # print(t1_op)
-        # print(t2_op)
-
-        act, hold, st = functions._stock2(t0_op, t1_op, t2_op, hold)
+        trend = functions._comp(rec, out)
+        act, hold = functions._stock(trend, hold)
+        
+        if n_ts!=len(test_dataloader)-1:
+            print('Day ' + str(n_ts+1) + ' >> act: ' + str(act))
+            
         act_tot.append(act)
         hold_tot.append(hold)
-        sti.append(st)
+        
         if n_ts==0:
-            pred_tes = out_py
+            pred_tes = out
         else:
-            pred_tes = np.concatenate((pred_tes, out_py), axis=0)
+            pred_tes = np.concatenate((pred_tes, out), axis=0)
 
 # Val.
 pred_tes_ny = pred_tes.squeeze()
@@ -154,8 +158,6 @@ print('act')
 print(act_tot[:-1])
 print('\nhold')
 print(hold_tot[:-1])
-print('\nst')
-print(sti[:-1])
 
 #%% Save
 diction = {"Value": Result}
