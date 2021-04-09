@@ -150,7 +150,7 @@ val_tes = val_tes.to(device)
 loss_tes = loss_f(pred_tes[:-1], val_tes)
 print(loss_tes)
 
-#%% Trend
+#%% Print
 Result = np.array(act_tot)[:-1]
 
 print('total act')
