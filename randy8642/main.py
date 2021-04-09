@@ -165,8 +165,8 @@ print('pred')
 print(pred)
 
 
-from function import stock
-from profit_calculator import cal
+from randy8642.function import stock
+from randy8642.profit_calculator import cal
 agent_pred = stock()
 for i in pred:
     agent_pred.trade(i)

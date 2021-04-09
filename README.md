@@ -43,7 +43,7 @@ IBM公司過去特定時間段的每日股市開盤價、最高價、最低價�
 [[Stock History Reference](https://www.nasdaq.com/market-activity/stocks/ibm)]
 
 ## 分析
-![最後365天股市圖](/img/candlestick_last365.png)
+![最後180天股市圖與KD線](/img/後180天蠟燭圖與KD線.png)
 ![拆解trend](/img/decompose.jpeg)
 
 ## 方法說明
