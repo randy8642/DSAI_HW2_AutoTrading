@@ -16,8 +16,10 @@ NCKU DSAI course homework
 ### 使用方式
 1. 進入專案資料夾\
 `cd DSAI_HW2_AutoTrading`
+
 2. 安裝所需套件\
 `pip install -r requirements.txt`
+
 3. 安裝`PyTorch`\
     **詳見PyTorch官網，如有其他需求也請至該網站下載 [[LINK](https://pytorch.org/get-started/locally/)]**
     * Windows環境
@@ -32,6 +34,9 @@ NCKU DSAI course homework
         `pip install torch==1.8.1+cpu torchvision==0.9.1+cpu torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html`     
 4. 執行\
 `python main.py --training training.csv -- testing testing.csv --output output.csv`
+
+5. 驗證最終收益 (**該步驟可略**)
+`python profit_calculator.py --stock testing.csv --action output.csv`
 
 ## 資料來源
 IBM公司過去特定時間段的每日股市開盤價、最高價、最低價與收盤價，合計四項數值。\
