@@ -50,15 +50,15 @@ D_tra, mu, std = functions._nor(Data[:-1, :])
 L_tra = Data[1:, 0]
 L_tra = np.expand_dims(L_tra, axis=1)
 
-Val_tot = np.concatenate((Data[((config.tap-1)*-1):, :], Val))
-D_tes = functions._tsnor(mu, std, Val_tot)
+# Val_tot = np.concatenate((Data[((config.tap-1)*-1):, :], Val))
+D_tes = functions._tsnor(mu, std, Val)
 L_tes = np.zeros((D_tes.shape[0], 1))
 
 D_tra_T, L_tra_T = functions._pack(D_tra, config.tap), functions._pack(L_tra, config.tap)
 D_tes_T, L_tes_T = functions._pack(D_tes, config.tap), functions._pack(L_tes, config.tap)
 
-D_tes_T = D_tes_T[(config.tap-1):,:,:]
-L_tes_T = L_tes_T[(config.tap-1):,:,:]
+# D_tes_T = D_tes_T[(config.tap-1):,:,:]
+# L_tes_T = L_tes_T[(config.tap-1):,:,:]
 
 # dataset
 train_data = torch.from_numpy(D_tra_T).type(torch.FloatTensor)

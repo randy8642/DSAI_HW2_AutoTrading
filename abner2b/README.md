@@ -49,7 +49,8 @@ IBM公司過去特定時間段的每日股市開盤價、最高價、最低價�
 ## 方法說明
 ### 概述
 使用sliding windows的方式切割資料，以過去n天的四項指標預測隔天的開盤價。\
-接著根據預測值與今日開盤價做比較，得出漲/跌趨勢，再根據該趨勢決定明日行動。
+接著根據預測值與今日開盤價做比較，得出漲/跌趨勢，再根據該趨勢決定明日行動。\
+(**各參數詳見`config.py`**)
 
 ### 讀取資料並正規化
 ```py
@@ -67,5 +68,12 @@ D_tes = functions._tsnor(mu, std, Val_tot)
 ```py
 # Fill the empty of testing data
 Val_tot = np.concatenate((Data[((config.tap-1)*-1):, :], Val))
+# Sliding windows
+D_tra_T, L_tra_T = functions._pack(D_tra, config.tap), functions._pack(L_tra, config.tap)
+D_tes_T, L_tes_T = functions._pack(D_tes, config.tap), functions._pack(L_tes, config.tap)
+# Remove redundant data
+D_tes_T = D_tes_T[(config.tap-1):,:,:]
+L_tes_T = L_tes_T[(config.tap-1):,:,:]
 ```
+由於訓練資料為整段連續資料的開頭，
 ## 結果
