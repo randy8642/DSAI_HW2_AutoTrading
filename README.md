@@ -126,5 +126,7 @@ for n_ts, (Data_ts, Label_ts) in enumerate (test_dataloader):
 ![trend](https://i.imgur.com/2QuAqGm.png)
 由該處可發現，雖大致上趨勢皆有符合實際情形，但仍有1天左右的偏移，\
 推測此為預測失準的原因所致。
-
-`python profit_calculator.py --stock testing.csv --action output.csv`
+\
+訓練時loss的變化圖如下所示：
+![loss](https://i.imgur.com/25IFSwV.png)
+此處使用Adam作為optimizer；L1 loss作為loss function，參數詳見`config.py`。
