@@ -50,7 +50,6 @@ D_tra, mu, std = functions._nor(Data[:-1, :])
 L_tra = Data[1:, 0]
 L_tra = np.expand_dims(L_tra, axis=1)
 
-# D_tes, _, _ = functions._nor(Val)
 Val_tot = np.concatenate((Data[((config.tap-1)*-1):, :], Val))
 D_tes = functions._tsnor(mu, std, Val_tot)
 L_tes = np.zeros((D_tes.shape[0], 1))
