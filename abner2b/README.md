@@ -19,6 +19,7 @@ NCKU DSAI course homework
 
 2. 安裝所需套件\
 `pip install -r requirements.txt`
+(**不含PyTorch**)
 
 3. 安裝`PyTorch`\
     **詳見PyTorch官網，如有其他需求也請至該網站下載 [[LINK](https://pytorch.org/get-started/locally/)]**
