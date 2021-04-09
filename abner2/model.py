@@ -134,19 +134,19 @@ class m04(nn.Module):
             sz = out_sz
 
         self.Conv = nn.Sequential(
-            nn.Conv1d(tap, 16, kernel_size=7),
+            nn.Conv1d(tap, 8, kernel_size=7),
+            nn.BatchNorm1d(8),
+            nn.ReLU(),
+            nn.Conv1d(8, 16, kernel_size=7, dilation=3),
             nn.BatchNorm1d(16),
             nn.ReLU(),
-            nn.Conv1d(16, 32, kernel_size=7, dilation=3),
-            nn.BatchNorm1d(32),
-            nn.ReLU(),
-            nn.Conv1d(32, 16, kernel_size=1)            
+            nn.Conv1d(16, 8, kernel_size=1)            
         )
         self.FC = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(128, 64),
+            nn.Linear(64, 16),
             nn.ReLU(),
-            nn.Linear(64, 1)
+            nn.Linear(16, 1)
         )
     def forward(self, x):
         x_GRU, hn = self.GRU(x)

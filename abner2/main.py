@@ -43,14 +43,15 @@ def setup_seed(seed):
     random.seed(seed)
     torch.backends.cudnn.deterministic = True
 
-setup_seed(3)
+setup_seed(25)
 
 #%% Split
 D_tra, mu, std = functions._nor(Data[:-1, :])
 L_tra = Data[1:, 0]
 L_tra = np.expand_dims(L_tra, axis=1)
 
-D_tes, _, _ = functions._nor(Val)
+# D_tes, _, _ = functions._nor(Val)
+D_tes = functions._tsnor(mu, std, Val)
 L_tes = np.zeros((D_tes.shape[0], 1))
 
 D_tra_T, L_tra_T = functions._pack(D_tra, config.tap), functions._pack(L_tra, config.tap)
@@ -69,10 +70,10 @@ test_dataloader = torch.utils.data.DataLoader(dataset = test_dataset, batch_size
 
 #%% Parameters
 Epoch = config.ep
-single_model = model.m03(4, 16, config.tap, hid=config.hid, bid=config.bid)
-# single_model = model.m04(4, 16, config.tap, hid=config.hid, bid=config.bid)
-single_optim = optim.SGD(single_model.parameters(), lr=config.lr)
-# single_optim = optim.Adam(single_model.parameters(), lr=config.lr)
+# single_model = model.m03(4, 16, config.tap, hid=config.hid, bid=config.bid)
+single_model = model.m04(4, 16, config.tap, hid=config.hid, bid=config.bid)
+# single_optim = optim.SGD(single_model.parameters(), lr=config.lr)
+single_optim = optim.Adam(single_model.parameters(), lr=config.lr)
 loss_f = nn.L1Loss()
 
 single_model.to(device)
@@ -113,7 +114,7 @@ with torch.no_grad():
     hold_tot = []
     for n_ts, (Data_ts, Label_ts) in enumerate (test_dataloader):
         rec = out
-
+        
         data = Data_ts
         data = data.to(device)
             

@@ -14,6 +14,10 @@ def _nor(x):
     train_norm = (x - mu) / std
     return train_norm, mu, std
 
+def _tsnor(mu, std, x):
+    norm = (x - mu) / std
+    return norm
+
 def _comp(rec, out):
     if rec>out:
         trend = -1
