@@ -1,7 +1,4 @@
 import numpy as np
-import torch
-import torch.optim as optim
-import torch.nn as nn
 import pandas as pd
 import os
 import random
@@ -10,6 +7,10 @@ import argparse
 import functions
 import config
 import model
+
+import torch
+import torch.optim as optim
+import torch.nn as nn
 
 #%% Args
 parser = argparse.ArgumentParser()
@@ -97,7 +98,7 @@ for epoch in range(Epoch):
         single_optim.step()
         
     with torch.no_grad():
-        print('epoch[{}], loss:{:.4f}'.format(epoch+1, loss.item()))
+        print('epoch[{}], loss:{:.4f}'.format(epoch+1, loss.item()), "\r" , end=' ')
         LOSS.append(loss.item())
 LOSS = np.array(LOSS)
   
@@ -128,17 +129,6 @@ with torch.no_grad():
         else:
             pred_tes = np.concatenate((pred_tes, out), axis=0)
 
-# Val.
-pred_tes_ny = pred_tes.squeeze()
-pred_tes = torch.from_numpy(pred_tes_ny).type(torch.FloatTensor)
-pred_tes = pred_tes.to(device)
-
-val_tes_ny = Val[1:,0]
-val_tes = torch.from_numpy(val_tes_ny).type(torch.FloatTensor)
-val_tes = val_tes.to(device)
-loss_tes = loss_f(pred_tes[:-1], val_tes)
-print(loss_tes)
-
 #%% Trend
 Result = np.array(act_tot)[:-1]
 
@@ -156,7 +146,3 @@ select_df.to_csv(sf,index=0,header=0)
 loss_diction = {"loss": LOSS}
 select_loss_df = pd.DataFrame(loss_diction)
 select_loss_df.to_csv('loss_plot.csv',index=0,header=0)
-
-pred_diction = {"pred": pred_tes_ny, "val": Val[:,0]}
-select_pred_df = pd.DataFrame(pred_diction)
-select_pred_df.to_csv('pred_plot.csv',index=0,header=0)
