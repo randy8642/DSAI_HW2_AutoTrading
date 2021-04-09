@@ -141,3 +141,11 @@ for n_ts, (Data_ts, Label_ts) in enumerate (test_dataloader):
 訓練時loss的變化圖如下所示：
 ![loss](https://i.imgur.com/25IFSwV.png)
 此處使用Adam作為optimizer；L1 loss作為loss function，**參數詳見`config.py`**。
+
+### 小節
+最終我們輸出的行動策略為`output.csv`作為最終答案。
+
+>本次作業我們僅用預測隔天的開盤價，去決定未來採取的行動，\
+>但若長期來看，因預測趨勢的失準可能會導致輸出的行動有偏差，\
+>故最好的方式應是透過訓練模型與環境的互動，使其學會採取更高利潤的行動，\
+>如A3C等強化學習的方式進行，應能提升成效。
