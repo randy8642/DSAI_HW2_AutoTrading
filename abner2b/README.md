@@ -15,7 +15,7 @@ NCKU DSAI course homework
 
 ### 使用方式
 1. 進入專案資料夾\
-`cd DSAI_HW2_AutoTrading`
+`cd /d [path/to/this/project]`
 
 2. 安裝所需套件\
 `pip install -r requirements.txt`
