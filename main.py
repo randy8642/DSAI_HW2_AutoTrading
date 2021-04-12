@@ -29,9 +29,9 @@ parser.add_argument('-O','--output',
 args = parser.parse_args()
 
 #%% Load
-P = './data'
-Data = np.array(pd.read_csv(os.path.join(P, args.training), header=None))
-Val = np.array(pd.read_csv(os.path.join(P, args.testing), header=None))
+
+Data = np.array(pd.read_csv(args.training, header=None))
+Val = np.array(pd.read_csv(args.testing, header=None))
 
 print(torch.device('cuda' if torch.cuda.is_available() else 'cpu'))
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') 

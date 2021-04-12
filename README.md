@@ -30,7 +30,7 @@ NCKU DSAI course homework
       * 含 CUDA 11.1\
         `pip install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html`         
 4. 執行\
-`python main.py --training training.csv --testing testing.csv --output output.csv`
+`python main.py --training ./data/training.csv --testing ./data/testing.csv --output output.csv`
 
 ## 資料來源
 IBM公司過去某時間段的每日股市開盤價、最高價、最低價與收盤價，合計四項數值。\
