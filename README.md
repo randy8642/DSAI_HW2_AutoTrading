@@ -18,21 +18,17 @@ NCKU DSAI course homework
 `cd /d [path/to/this/project]`  
 
 2. 安裝所需套件\
-`pip install -r requirements.txt`  (**不含PyTorch**，需照以下步驟安裝。)
+`pip install -r requirements.txt`  (**含CPU版PyTorch**，若需使用GPU需照以下步驟安裝。)
 
 
-3. 安裝`PyTorch`\
-    **詳見PyTorch官網，如有其他需求也請至該網站下載 [[LINK](https://pytorch.org/get-started/locally/)]**
+3. \[額外\]安裝`PyTorch - GPU`\
+    **詳見PyTorch官網，如有其他需求也請至該網站下載 \[[LINK](https://pytorch.org/get-started/locally/)\]**
     * Windows環境
-      * 具有GPU (CUDA 11.1)\
-        `pip install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio===0.8.1 -f https://download.pytorch.org/whl/torch_stable.html` 
-      * 無GPU\
-        `pip install torch==1.8.1+cpu torchvision==0.9.1+cpu torchaudio===0.8.1 -f https://download.pytorch.org/whl/torch_stable.html`
+      * 含 CUDA 11.1\
+        `pip install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio===0.8.1 -f https://download.pytorch.org/whl/torch_stable.html`      
     * Linux環境
-      * 具有GPU (CUDA 11.1)\
-        `pip install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html` 
-      * 無GPU\
-        `pip install torch==1.8.1+cpu torchvision==0.9.1+cpu torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html`     
+      * 含 CUDA 11.1\
+        `pip install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html`         
 4. 執行\
 `python main.py --training training.csv --testing testing.csv --output output.csv`
 
